@@ -1,6 +1,5 @@
 package com.fic.notesapp.view;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,14 +20,11 @@ import com.fic.notesapp.R;
 import com.fic.notesapp.controller.CategoryController;
 import com.fic.notesapp.controller.NoteController;
 import com.fic.notesapp.model.category.Category;
-import com.fic.notesapp.model.note.Note;
-import com.google.android.material.transformation.ExpandableTransformationBehavior;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddNotesActivity extends AppCompatActivity {
+public class UpdateCategoryActivity extends AppCompatActivity {
 
     NoteController noteController;
     CategoryController categoryController;
@@ -36,13 +32,26 @@ public class AddNotesActivity extends AppCompatActivity {
     Spinner spCategory;
     AppCompatButton btnAddNote;
     int idCategory = 1;
+    String extraNoteName;
+    String extraNoteContent;
+    int extraNoteId;
+    int extraCategoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_notes);
+        setContentView(R.layout.activity_update_category);
+        initExtras();
         initComponents();
         initListeners();
+    }
+
+    private void initExtras() {
+
+        extraNoteName = getIntent().getStringExtra("NOTE_NAME");
+        extraNoteContent = getIntent().getStringExtra("NOTE_CONTENT");
+        extraNoteId = getIntent().getIntExtra("NOTE_ID", 0);
+        extraCategoryId = getIntent().getIntExtra("NOTE_CATEGORY_ID", 0);
 
     }
 
@@ -53,6 +62,10 @@ public class AddNotesActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etContent = findViewById(R.id.etContent);
         btnAddNote = findViewById(R.id.addNote);
+
+        etTitle.setText(extraNoteName);
+        etContent.setText(extraNoteContent);
+
         initSpinner();
     }
 
@@ -91,25 +104,25 @@ public class AddNotesActivity extends AppCompatActivity {
 
         btnAddNote.setOnClickListener(v -> {
             if(validarDatos()){
-                
-                saveNote();
+
+                updateNote();
                 finish();
-                
+
             }
         });
 
     }
 
-    private void saveNote() {
+    private void updateNote() {
 
         try {
-            noteController.insertNote(etTitle.getText().toString(), etContent.getText().toString(), idCategory,"10/10/2023");
-            Toast.makeText(this, "La nota se ha guardado correctamente", Toast.LENGTH_SHORT).show();
+            noteController.updateNote(extraNoteId, idCategory, etTitle.getText().toString(), etContent.getText().toString(), "10/10/2023");
+            Toast.makeText(this, "La nota se ha actualizado correctamente", Toast.LENGTH_SHORT).show();
         } catch (Exception e){
-            Toast.makeText(this, "No se ha podido añadir la nota", Toast.LENGTH_SHORT).show();
-            Log.i("ERROR_ADD_NOTE", "Error al guardar la nota: " + e.getMessage());
+            Toast.makeText(this, "No se ha podido actualizar la nota", Toast.LENGTH_SHORT).show();
+            Log.i("ERROR_ADD_NOTE", "Error al actualizar la nota: " + e.getMessage());
         }
-        
+
     }
 
     private boolean validarDatos() {

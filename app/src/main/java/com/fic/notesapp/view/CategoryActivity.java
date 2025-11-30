@@ -51,8 +51,6 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
 
-
-
     private void initComponents() {
 
         rvCategories = findViewById(R.id.rvCategories);
@@ -73,7 +71,7 @@ public class CategoryActivity extends AppCompatActivity {
         noteAdapter = new NoteAdapter(new NoteAdapter.OnNoteActionListener() {
             @Override
             public void onEdit(Note note) {
-                addNoteActivity(true);
+                updateNoteActivity(note);
             }
         });
         noteAdapter.setData(noteController.getAllNotes());
@@ -93,7 +91,7 @@ public class CategoryActivity extends AppCompatActivity {
         });
 
         fabAddNote.setOnClickListener(view -> {
-            addNoteActivity(false);
+            addNoteActivity();
         });
 
     }
@@ -106,16 +104,22 @@ public class CategoryActivity extends AppCompatActivity {
         noteAdapter.setData(noteController.getAllNotes());
     }
 
-    private void addNoteActivity(boolean onEdit){
+    private void addNoteActivity(){
         Intent intent = new Intent(this, AddNotesActivity.class);
+        startActivity(intent);
+    }
 
-        if (onEdit){
-            intent.putExtra("ON_EDIT", true);
-            startActivity(intent);
-        } else {
-            intent.putExtra("ON_EDIT", false);
-            startActivity(intent);
-        }
+    private void updateNoteActivity(Note note){
+
+        Intent intent = new Intent(this, UpdateCategoryActivity.class);
+
+        intent.putExtra("NOTE_NAME", note.note_title);
+        intent.putExtra("NOTE_CONTENT", note.note_content);
+        intent.putExtra("NOTE_ID", note.note_id);
+        intent.putExtra("NOTE_CATEGORY_ID", note.category_id);
+
+        startActivity(intent);
+
 
     }
 

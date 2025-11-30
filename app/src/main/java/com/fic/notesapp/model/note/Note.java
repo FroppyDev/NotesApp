@@ -13,7 +13,7 @@ import com.fic.notesapp.model.category.Category;
 public class Note {
 
     @PrimaryKey(autoGenerate = true)
-    int note_id = 0;
+    public int note_id = 0;
 
     @ColumnInfo(name = "category_id")
     public int category_id;
