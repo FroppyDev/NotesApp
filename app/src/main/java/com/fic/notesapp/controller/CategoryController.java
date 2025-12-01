@@ -1,6 +1,7 @@
 package com.fic.notesapp.controller;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.fic.notesapp.model.ProviderDatabase;
 import com.fic.notesapp.model.category.Category;
@@ -24,11 +25,14 @@ public class CategoryController {
             categoryDao.insertCategory(category);
 
         } catch (Exception e){
-
+            Log.i("ERROR_INSERT_CATEGORY", "Error al insertar categoria:" + e.getMessage());
         }
     }
+
+    public void deleteCategory(Category category) { categoryDao.deleteCategory(category);}
 
     public List<Category> getAllCategories() { return categoryDao.getAllCategories(); }
 
     public Category getCategoryById(int id) { return categoryDao.getCategoryById(id); }
+
 }

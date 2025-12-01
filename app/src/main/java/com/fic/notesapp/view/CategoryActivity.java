@@ -1,25 +1,28 @@
 package com.fic.notesapp.view;
 
-import static android.widget.GridLayout.HORIZONTAL;
-
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fic.notesapp.R;
 import com.fic.notesapp.controller.CategoryController;
 import com.fic.notesapp.controller.NoteController;
+import com.fic.notesapp.model.category.Category;
 import com.fic.notesapp.model.note.Note;
 import com.fic.notesapp.view.category.CategoryAdapter;
 import com.fic.notesapp.view.note.NoteAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -30,6 +33,8 @@ public class CategoryActivity extends AppCompatActivity {
     CategoryController categoryController;
     NoteController noteController;
     FloatingActionButton fabAdd, fabAddNote;
+    TextView tvNotesCount;
+    List<Integer> searchList;
 
 
 
@@ -50,9 +55,6 @@ public class CategoryActivity extends AppCompatActivity {
         refreshNotes();
     }
 
-
-
-
     private void initComponents() {
 
         rvCategories = findViewById(R.id.rvCategories);
@@ -61,27 +63,56 @@ public class CategoryActivity extends AppCompatActivity {
         noteController = new NoteController(this);
         fabAdd = findViewById(R.id.fabAdd);
         fabAddNote = findViewById(R.id.fabAddNote);
+        searchList = new ArrayList<>();
+        tvNotesCount = findViewById(R.id.tvNotesCount);
 
     }
 
     private void initRV() {
 
+        List<Note> notesList = noteController.getAllNotes();
+
         LinearLayoutManager layoutManagerCategory = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         LinearLayoutManager layoutManagerNote = new LinearLayoutManager(this);
-        categoryAdapter = new CategoryAdapter();
+        categoryAdapter = new CategoryAdapter(new CategoryAdapter.CheckedAction() {
+            @Override
+            public void onChecked(Category category, boolean checked) {
+                if (checked){
+                    searchList.add(category.category_id);
+                    refreshNotes();
+                } else {
+                    searchList.remove(Integer.valueOf(category.category_id));
+                    refreshNotes();
+                }
+            }
+
+            @Override
+            public void onDelete(Category category) {
+                if (category.category_id == 1){
+                    return;
+                } else {
+                    deleteCategoryDialog(category);
+                }
+            }
+        });
         categoryAdapter.setData(categoryController.getAllCategories());
         noteAdapter = new NoteAdapter(new NoteAdapter.OnNoteActionListener() {
             @Override
             public void onEdit(Note note) {
                 addNoteActivity(true, note);
             }
-        });
-        noteAdapter.setData(noteController.getAllNotes());
 
+            @Override
+            public void onDelete(Note note) {
+                refreshNotes();
+            }
+        });
+        noteAdapter.setData(notesList);
         rvCategories.setLayoutManager(layoutManagerCategory);
         rvNotes.setLayoutManager(layoutManagerNote);
         rvCategories.setAdapter(categoryAdapter);
         rvNotes.setAdapter(noteAdapter);
+        tvNotesCount.setText(" -> " + notesList.size());
 
     }
 
@@ -103,7 +134,20 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     private void refreshNotes() {
-        noteAdapter.setData(noteController.getAllNotes());
+
+        List<Note> notesList;
+
+        if (searchList.isEmpty()){
+            notesList = noteController.getAllNotes();
+            noteAdapter.setData(notesList);
+            tvNotesCount.setText(" -> " + notesList.size());
+        } else {
+            notesList = noteController.getNotesByCategories(searchList);
+            noteAdapter.setData(notesList);
+            tvNotesCount.setText(" -> " + notesList.size());
+
+        }
+
     }
 
     private void addNoteActivity(boolean onEdit, Note note){
@@ -121,6 +165,45 @@ public class CategoryActivity extends AppCompatActivity {
             intent.putExtra("ON_EDIT", false);
             startActivity(intent);
         }
+
+    }
+
+    public void deleteCategory(Category category){
+        try {
+            noteController.updateNotesCategoryByDefault(category.category_id);
+            categoryController.deleteCategory(category);
+
+        } catch (Exception e){
+            Log.i("ERROR_DELETE_CATEGORY", "Error al eliminar categoria:" + e.getMessage());
+        }
+    }
+
+    public void deleteCategoryDialog(Category category){
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_delete_category);
+        List<Note> notes = noteController.getNotesByCategory(category.category_id);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button btnConfirm = dialog.findViewById(R.id.btnConfirm);
+        Button btnDecline = dialog.findViewById(R.id.btnDecline);
+        TextView tvLinkedNotes = dialog.findViewById(R.id.tvLinkedNotes);
+        tvLinkedNotes.setText(notes.size() + " " + getString(R.string.linked_notes));
+
+
+        btnConfirm.setOnClickListener(view -> {
+            deleteCategory(category);
+            refreshCategories();
+            refreshNotes();
+            dialog.dismiss();
+        });
+
+        btnDecline.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
+
+
+        dialog.show();
 
     }
 

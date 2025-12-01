@@ -27,5 +27,4 @@ public interface CategoryDao {
     @Query("SELECT * FROM category WHERE category_id = :id")
     Category getCategoryById(int id);
 
-
 }

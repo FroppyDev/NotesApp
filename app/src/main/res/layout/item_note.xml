@@ -23,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Nombre Categoria"
+                android:text="@string/category_place_holder_item_note"
                 android:textSize="15sp"
                 android:fontFamily="monospace"
                 android:padding="10dp"
@@ -33,7 +33,7 @@
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10/10/10"
+                android:text="@string/date_place_holder_item_note"
                 android:textSize="15sp"
                 android:fontFamily="monospace"
                 android:padding="10dp"/>
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Titulo de la nota"
+            android:text="@string/title_place_holder_item_note"
             android:gravity="start"
             android:padding="10dp"/>
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textStyle="normal"
-            android:text="Titulo de la nota"
+            android:text="@string/content_place_holder_item_note"
             android:gravity="center"
             android:padding="10dp"/>
 

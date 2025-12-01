@@ -15,8 +15,8 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
-    private List<Note> listNotes = new ArrayList<>();
-    private OnNoteActionListener listener;
+    private final List<Note> listNotes = new ArrayList<>();
+    private final OnNoteActionListener listener;
 
     public NoteAdapter(OnNoteActionListener listener){
         this.listener = listener;
@@ -52,5 +52,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     public interface OnNoteActionListener {
         void onEdit(Note note);
+        void onDelete(Note note);
     }
 }

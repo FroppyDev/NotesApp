@@ -41,5 +41,14 @@ public class NoteController {
 
     }
 
+    public void deleteNote(Note note) { noteDao.deleteNote(note); }
+
     public List<Note> getAllNotes() { return noteDao.getAllNotes(); }
+
+    public List<Note> getNotesByCategories(List<Integer> categoryId) { return noteDao.getNotesByCategories(categoryId); }
+
+    public List<Note> getNotesByCategory(int categoryId) { return noteDao.getNotesByCategory(categoryId); }
+
+    public void updateNotesCategoryByDefault(int idCategoryDeleted) {noteDao.updateNotesCategoryByDefault(idCategoryDeleted);}
+
 }

@@ -29,9 +29,6 @@
             android:name=".view.AddNotesActivity"
             android:exported="false" />
         <activity
-            android:name=".view.NotesActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>

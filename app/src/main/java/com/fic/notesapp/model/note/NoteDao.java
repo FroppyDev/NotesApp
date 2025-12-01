@@ -15,14 +15,14 @@ public interface NoteDao {
     @Insert
     void insertNote(Note note);
 
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note ORDER BY note_id DESC")
     List<Note> getAllNotes();
 
     @Query("SELECT * FROM note WHERE note_id = :id")
     Note getNoteById(int id);
 
     @Query("SELECT * FROM note WHERE category_id = :categoryId")
-    List<Note> getAllNotesByCategory(int categoryId);
+    List<Note> getNotesByCategory(int categoryId);
 
     @Delete
     void deleteNote(Note note);
@@ -30,4 +30,9 @@ public interface NoteDao {
     @Update
     void updateNote(Note note);
 
+    @Query("SELECT * FROM note WHERE category_id IN (:categoryIds)")
+    List<Note> getNotesByCategories(List<Integer> categoryIds);
+
+    @Query("UPDATE note SET category_id = 1 WHERE category_id = :idCategoryDeleted")
+    void updateNotesCategoryByDefault(int idCategoryDeleted);
 }

@@ -8,8 +8,15 @@ import androidx.room.PrimaryKey;
 
 import com.fic.notesapp.model.category.Category;
 
-@Entity(tableName = "note", foreignKeys = {
-        @ForeignKey(entity = Category.class, parentColumns = "category_id", childColumns = "note_id")})
+@Entity(
+        tableName = "note",
+        foreignKeys = @ForeignKey(
+                entity = Category.class,
+                parentColumns = "category_id",
+                childColumns = "category_id",
+                onDelete = ForeignKey.CASCADE
+        )
+)
 public class Note {
 
     @PrimaryKey(autoGenerate = true)

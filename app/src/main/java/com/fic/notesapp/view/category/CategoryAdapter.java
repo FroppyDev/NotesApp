@@ -9,13 +9,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fic.notesapp.R;
 import com.fic.notesapp.model.category.Category;
-import com.fic.notesapp.model.note.Note;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
-    private List<Category> listCategories = new ArrayList<>();;
+    private final List<Category> listCategories = new ArrayList<>();
+    private final CheckedAction checkedAction;
+
+    public CategoryAdapter(CheckedAction checkedAction) {
+        this.checkedAction = checkedAction;
+    }
 
     public void setData(List<Category> newListCategories){
         // Limpia la lista actual del adaptador.
@@ -40,11 +44,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category item = listCategories.get(position);
-        holder.render(item);
+        holder.render(item, checkedAction);
     }
 
     @Override
     public int getItemCount() {
         return listCategories.size();
+    }
+
+    public interface CheckedAction {
+        void onChecked(Category category, boolean checked);
+        void onDelete(Category category);
     }
 }

@@ -1,6 +1,5 @@
 package com.fic.notesapp.view;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,25 +9,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.fic.notesapp.R;
 import com.fic.notesapp.controller.CategoryController;
 import com.fic.notesapp.controller.NoteController;
 import com.fic.notesapp.model.CategorySpinner;
 import com.fic.notesapp.model.category.Category;
-import com.fic.notesapp.model.note.Note;
-import com.google.android.material.transformation.ExpandableTransformationBehavior;
 
-import java.time.LocalTime;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class AddNotesActivity extends AppCompatActivity {
 
@@ -75,8 +68,8 @@ public class AddNotesActivity extends AppCompatActivity {
             initExtras();
             etTitle.setText(extraNoteTitle);
             etContent.setText(extraNoteContent);
-            tvViewName.setText("Actualizar nota");
-            btnAddNote.setText("Actualizar");
+            tvViewName.setText(getText(R.string.update_note_text));
+            btnAddNote.setText(getText(R.string.btn_update_note));
         }
 
         initSpinner();
@@ -151,7 +144,7 @@ public class AddNotesActivity extends AppCompatActivity {
 
     private void updateNote(){
         try {
-            noteController.updateNote(extraNoteId, idCategory, etTitle.getText().toString(), etContent.getText().toString(), "10/10/2023");
+            noteController.updateNote(extraNoteId, idCategory, etTitle.getText().toString(), etContent.getText().toString(), getCurrentDate());
             Toast.makeText(this, "La nota se ha actualizado correctamente", Toast.LENGTH_SHORT).show();
         } catch (Exception e){
             Toast.makeText(this, "No se ha podido actualizar la nota", Toast.LENGTH_SHORT).show();
@@ -161,7 +154,7 @@ public class AddNotesActivity extends AppCompatActivity {
     private void saveNote() {
 
         try {
-            noteController.insertNote(etTitle.getText().toString(), etContent.getText().toString(), idCategory,"10/10/2023");
+            noteController.insertNote(etTitle.getText().toString(), etContent.getText().toString(), idCategory, getCurrentDate());
             Toast.makeText(this, "La nota se ha guardado correctamente", Toast.LENGTH_SHORT).show();
         } catch (Exception e){
             Toast.makeText(this, "No se ha podido añadir la nota", Toast.LENGTH_SHORT).show();
@@ -172,5 +165,10 @@ public class AddNotesActivity extends AppCompatActivity {
 
     private boolean validarDatos() {
         return !etTitle.getText().toString().isEmpty() && !etContent.getText().toString().isEmpty();
+    }
+
+    public String getCurrentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return sdf.format(new Date());
     }
 }

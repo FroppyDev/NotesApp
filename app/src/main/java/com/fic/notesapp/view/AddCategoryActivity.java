@@ -1,17 +1,10 @@
 package com.fic.notesapp.view;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.fic.notesapp.R;
 import com.fic.notesapp.controller.CategoryController;
 
@@ -58,8 +51,10 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     private boolean validateField() {
 
-        if (etTitle.getText().toString().isEmpty()) {
-            etTitle.setError("El campo no puede estar vacio");
+        String title = etTitle.getText().toString().trim();
+
+        if (title.isEmpty()) {
+            etTitle.setError(getText(R.string.error_empty_field));
             return false;
         } else {
             return true;
