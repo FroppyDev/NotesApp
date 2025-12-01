@@ -7,12 +7,12 @@ Este proyecto fue desarrollado como una práctica para solidificar conceptos cla
 
 ## Caracteristicas principales
 
-•Crear y Editar Notas: Interfaz simple para añadir nuevas notas o modificar las existentes.
-•Eliminar Notas: Funcionalidad para borrar notas con un solo toque.
-•Gestión de Categorías: Permite a los usuarios crear y asignar categorías a sus notas para una mejor organización.
-•Interfaz Limpia y Moderna: Uso de RecyclerView y CardView para una presentación visual agradable y eficiente de las notas.
-•Persistencia de Datos: Almacenamiento local de notas y categorías utilizando una base de datos SQLite.
-•Arquitectura Sólida: Sigue un patrón de diseño que separa la lógica de negocio (Controller) de la interfaz de usuario (View), mejorando la mantenibilidad del código.
+  •Crear y Editar Notas: Interfaz simple para añadir nuevas notas o modificar las existentes.
+  •Eliminar Notas: Funcionalidad para borrar notas con un solo toque.
+  •Gestión de Categorías: Permite a los usuarios crear y asignar categorías a sus notas para una mejor organización.
+  •Interfaz Limpia y Moderna: Uso de RecyclerView y CardView para una presentación visual agradable y eficiente de las notas.
+  •Persistencia de Datos: Almacenamiento local de notas y categorías utilizando una base de datos SQLite.
+  •Arquitectura Sólida: Sigue un patrón de diseño que separa la lógica de negocio (Controller) de la interfaz de usuario (View), mejorando la mantenibilidad del código.
 
 ## Instalacion y ejecucion
   1. Copia el repositorio:
